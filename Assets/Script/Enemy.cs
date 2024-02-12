@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour
     
     [SerializeField]private int score;
 
+    public int rangeMin;
+    public int rangeMax;
+
     public delegate void ExplodingDelegate(int score);
     public static ExplodingDelegate ExplodingEvent;
 
@@ -34,6 +37,10 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
+
+        if(collision.tag == "recycle"){
+            ResetEnemy();
+        }
         if(collision.tag == "bullet"){
             PlayEffect();
             if(ExplodingEvent != null){
@@ -44,6 +51,12 @@ public class Enemy : MonoBehaviour
 
     public void ResetEnemy(){
         Destroy(gameObject);
+    }
+
+    public Vector3 SpawnPosition(){
+        float xRange = Random.Range(rangeMin,rangeMax+1);
+        Vector3 spawnPosition = new Vector3(xRange, 6);
+        return spawnPosition;
     }
 
     
