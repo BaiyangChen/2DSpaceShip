@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     private Transform player;
     private Animator animator;
     public float speed;
+    private AudioSource audioSource;
     
     [SerializeField]private int score;
 
@@ -28,12 +29,13 @@ public class Enemy : MonoBehaviour
         Vector3 target = player.position - transform.position;
         target.Normalize();
         GetComponent<Rigidbody2D>().AddForce(target * speed);
-        
+        audioSource = GetComponent<AudioSource>();
 
     }
 
     private void PlayEffect(){
         animator.SetTrigger("Explosion");
+        audioSource.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
@@ -43,6 +45,7 @@ public class Enemy : MonoBehaviour
         }
         if(collision.tag == "bullet"){
             PlayEffect();
+            GetComponent<Collider2D>().enabled = false;
             if(ExplodingEvent != null){
                 ExplodingEvent(getScore());
             }
